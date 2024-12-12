@@ -312,6 +312,19 @@ jobs:
             unzip AnyKernel3.zip -d AnyKernel3/
         fi
         cp android-kernel/out/arch/${{ env.ARCH }}/boot/${{ env.KERNEL_IMAGE_NAME }} AnyKernel3/
+        if [ -d "AnyKernel3/modules" ]; then
+          rm -rf AnyKernel3/modules/
+          mkdir AnyKernel3/modules/
+          mkdir AnyKernel3/modules/vendor/
+          mkdir AnyKernel3/modules/vendor/lib
+          mkdir AnyKernel3/modules/vendor/lib/modules/
+        else
+          mkdir AnyKernel3/modules/
+          mkdir AnyKernel3/modules/vendor/
+          mkdir AnyKernel3/modules/vendor/lib
+          mkdir AnyKernel3/modules/vendor/lib/modules/
+        fi
+        find "android-kernel/out/modules" -type f -iname "*.ko" -exec cp -r {} ./AnyKernel3/modules/vendor/lib/modules/ \;
         if [ ${{ env.CHECK_DTBO_IS_OK }} = true ]; then
             cp android-kernel/out/arch/${{ env.ARCH }}/boot/dtbo.img AnyKernel3/
         fi
